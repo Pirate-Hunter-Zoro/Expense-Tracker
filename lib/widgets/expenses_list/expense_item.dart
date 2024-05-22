@@ -15,7 +15,12 @@ class ExpenseItem extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(expense.title),
+            Row(
+              children: [
+                Text(expense.title),
+                const Spacer(),
+              ],
+            ),
             const SizedBox(
               height: 4,
             ),
@@ -26,11 +31,11 @@ class ExpenseItem extends StatelessWidget {
                 const Spacer(), // Push whatever is left to the left, and whatever is to the right to the right
                 Row(
                   children: [
-                    const Icon(Icons.alarm),
+                    Icon(categoryIcons[expense.category]),
                     const SizedBox(
                       width: 8,
                     ),
-                    Text(expense.date.toString()),
+                    Text(expense.formattedDate),
                   ],
                 ),
               ],
