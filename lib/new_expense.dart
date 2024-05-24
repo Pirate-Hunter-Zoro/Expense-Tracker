@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tracker_app/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -12,17 +13,25 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  DateTime? _selectedDate; // Could be null
+  Category _selectedCategory = Category.leisure;
 
-  void _presentDatePicker() {
+  void _presentDatePicker() async {
     final now = DateTime.now();
     // When constructing a DateTime object, the only required parameter is the year
     final firstDate = DateTime(now.year - 1, now.month, now.day);
-    showDatePicker(
+    final pickedDate = await showDatePicker(
+      // This returns a FUTURE object - which will eventually be a DateTime object
       context: context,
       initialDate: now,
       firstDate: firstDate,
       lastDate: now,
     );
+    // The following code will ONLY be executed once pickedDate is received
+    setState(() {
+      // Now the widget knows to rebuild the UI
+      _selectedDate = pickedDate;
+    });
   }
 
   @override
@@ -66,12 +75,16 @@ class _NewExpenseState extends State<NewExpense> {
                 ),
               ),
               const SizedBox(
-                width: 16,
+                width: 10,
               ),
               Expanded(
                 child: Row(
                   children: [
-                    const Text('Selected Date'),
+                    Text(
+                      _selectedDate == null
+                          ? 'No date selected'
+                          : formatter.format(_selectedDate!),
+                    ),
                     IconButton(
                       onPressed: _presentDatePicker,
                       icon: const Icon(Icons.calendar_month),
@@ -81,8 +94,33 @@ class _NewExpenseState extends State<NewExpense> {
               )
             ],
           ),
+          const SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
+              DropdownButton(
+                value: _selectedCategory,
+                items: Category.values
+                    .map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(
+                          category.name.toUpperCase(),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  // Then set the new category, and update the UI
+                  if (value != null) {
+                    setState(() {
+                      _selectedCategory = value;
+                    });
+                  }
+                }, // Acts depending on the item selected
+              ),
+              const Spacer(),
               TextButton(
                 onPressed: () {
                   // Close out of the expense creation dialog
