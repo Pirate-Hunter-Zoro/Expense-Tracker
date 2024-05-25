@@ -11,6 +11,17 @@ var kColorScheme = ColorScheme.fromSeed(
   ),
 );
 
+var kDarkColorScheme = ColorScheme.fromSeed(
+  brightness: Brightness
+      .dark, // Tells flutter to optimize this color theme/various shades to dark mode
+  seedColor: const Color.fromARGB(
+    255,
+    5,
+    99,
+    125,
+  ),
+);
+
 void main() {
   runApp(const MyApp());
 }
@@ -22,6 +33,35 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      darkTheme: ThemeData.dark().copyWith(
+        // Add a dark color theme option as well
+        colorScheme: kDarkColorScheme,
+        cardTheme: const CardTheme().copyWith(
+          // Default parameters for ALL cards used ANYWHERE in this app
+          color: kDarkColorScheme.secondaryContainer,
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kDarkColorScheme.primaryContainer,
+            foregroundColor: kDarkColorScheme.onPrimaryContainer,
+          ),
+        ),
+        textTheme: ThemeData().textTheme.copyWith(
+              titleLarge: TextStyle(
+                fontWeight: FontWeight.normal,
+                color: kDarkColorScheme.onSecondaryContainer,
+                fontSize: 14,
+              ),
+            ),
+        dropdownMenuTheme: ThemeData().dropdownMenuTheme.copyWith(
+              textStyle: TextStyle(
+                fontWeight: FontWeight.normal,
+                color: kDarkColorScheme.onSecondaryContainer,
+                fontSize: 14,
+              ),
+            ),
+      ),
       theme: ThemeData().copyWith(
         colorScheme: kColorScheme,
         appBarTheme: const AppBarTheme().copyWith(
@@ -50,6 +90,8 @@ class MyApp extends StatelessWidget {
             ),
       ),
       home: const Expenses(),
+      // themeMode: ThemeMode.system, // Depending on what the user does with their system regarding dark/light mode, that's what we'll do in the app
+      // By default, themeMode is already ThemeMode.system
     );
   }
 }

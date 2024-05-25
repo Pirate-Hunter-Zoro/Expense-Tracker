@@ -18,6 +18,12 @@ class ExpensesList extends StatelessWidget {
       itemBuilder: (context, idx) => Dismissible(
         // Swipe left to erase widget - but we ALSO need to remove the underlying data
         key: ValueKey(expenses[idx]),
+        background: Container(
+          color: Theme.of(context).colorScheme.error,
+          margin: EdgeInsets.symmetric(
+            horizontal: Theme.of(context).cardTheme.margin!.horizontal,
+          ),
+        ),
         onDismissed: (direction) => onRemoveExpense(expenses[idx]),
         child: ExpenseItem(
           expense: expenses[idx],

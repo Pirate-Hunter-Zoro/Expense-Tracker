@@ -17,7 +17,9 @@ class ExpenseItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(expense.title),
+                Text(
+                  expense.title,
+                ),
                 const Spacer(),
               ],
             ),
