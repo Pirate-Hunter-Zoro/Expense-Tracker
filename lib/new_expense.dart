@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tracker_app/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.onAddExpense});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<StatefulWidget> createState() {
@@ -34,6 +36,47 @@ class _NewExpenseState extends State<NewExpense> {
     });
   }
 
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(
+        _amountController.text); // parses a double if it can, else return null
+    final amountIsInvalid =
+        (enteredAmount == null || enteredAmount < 0) ? true : false;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        (_selectedDate == null)) {
+      // Show the error dialog and then STOP
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Invalid input'),
+          content: const Text(
+              'Please enter a valid title, amount, date and category.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Okay'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    // We can do the following because we are in a State object - it can access the NewExpense widget's 'onAddExpense' value.
+    widget.onAddExpense(
+      Expense(
+          title: _titleController.text,
+          amount: enteredAmount,
+          date: _selectedDate!,
+          category: _selectedCategory),
+    );
+
+    // And close the form
+    Navigator.pop(context);
+  }
+
   @override
   void dispose() {
     // This method is called automatically when a widget is removed from the UI.
@@ -46,7 +89,8 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(
+          16, 48, 16, 16), // Need more room from the top
       child: Column(
         children: [
           TextField(
@@ -129,7 +173,7 @@ class _NewExpenseState extends State<NewExpense> {
                 child: const Text('Cancel'),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _submitExpenseData,
                 child: const Text('Save Expense'),
               ),
             ],
