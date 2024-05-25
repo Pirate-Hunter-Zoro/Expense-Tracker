@@ -53,6 +53,16 @@ class MyApp extends StatelessWidget {
                 color: kDarkColorScheme.onSecondaryContainer,
                 fontSize: 14,
               ),
+              titleMedium: TextStyle(
+                fontWeight: FontWeight.normal,
+                color: kDarkColorScheme.onSecondaryContainer,
+                fontSize: 12,
+              ),
+              titleSmall: TextStyle(
+                fontWeight: FontWeight.normal,
+                color: kDarkColorScheme.onSecondaryContainer,
+                fontSize: 10,
+              ),
             ),
         dropdownMenuTheme: ThemeData().dropdownMenuTheme.copyWith(
               textStyle: TextStyle(

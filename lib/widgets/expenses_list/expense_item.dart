@@ -19,6 +19,7 @@ class ExpenseItem extends StatelessWidget {
               children: [
                 Text(
                   expense.title,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Spacer(),
               ],
@@ -28,7 +29,10 @@ class ExpenseItem extends StatelessWidget {
             ),
             Row(
               children: [
-                Text('\$${expense.amount.toStringAsFixed(2)}'), // 2 decimals
+                Text(
+                  '\$${expense.amount.toStringAsFixed(2)}',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ), // 2 decimals
                 // Group the next pieces of information together
                 const Spacer(), // Push whatever is left to the left, and whatever is to the right to the right
                 Row(
@@ -37,7 +41,10 @@ class ExpenseItem extends StatelessWidget {
                     const SizedBox(
                       width: 8,
                     ),
-                    Text(expense.formattedDate),
+                    Text(
+                      expense.formattedDate,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
                   ],
                 ),
               ],
