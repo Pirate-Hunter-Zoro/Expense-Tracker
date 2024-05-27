@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
 import 'package:tracker_app/expenses.dart';
 
 // Generally start global variables with a naming scheme starting with 'k'
@@ -23,6 +24,15 @@ var kDarkColorScheme = ColorScheme.fromSeed(
 );
 
 void main() {
+  // Following commented out code FORCES vertical mode
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  // ]).then(
+  //   (fn) => runApp(const MyApp()),
+  // );
+
+  // But we'll do this instead
   runApp(const MyApp());
 }
 

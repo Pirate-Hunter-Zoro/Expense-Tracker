@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tracker_app/new_expense.dart';
+import 'package:tracker_app/new_expense/new_expense.dart';
 import 'package:tracker_app/widgets/chart/chart.dart';
 import 'package:tracker_app/widgets/expenses_list/expenses_list.dart';
 import 'package:tracker_app/models/expense.dart';
@@ -32,6 +32,7 @@ class _ExpensesState extends State<Expenses> {
   void _openAddExpenseOverlay() {
     // Since we're in a class that extends State<>, we already have a context field
     showModalBottomSheet(
+      useSafeArea: true, // No overlapping with the camera/time/batter at the top of the phone screen
       isScrollControlled:
           true, // Now the keyboard will not cover up input fields because this form now starts at the top of the screen
       context: context,
@@ -75,6 +76,9 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
     Widget mainContent = const Center(
       child: Text('No expenses found. Start adding some!'),
     );
@@ -101,16 +105,31 @@ class _ExpensesState extends State<Expenses> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Chart(
-            expenses: _registeredExpenses,
-          ),
-          Expanded(
-            child: mainContent,
-          ),
-        ],
-      ),
+      body: width < height
+          ? Column(
+              children: [
+                Chart(
+                  expenses: _registeredExpenses,
+                ),
+                Expanded(
+                  child: mainContent,
+                ),
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(
+                  // Only take up as much room in the row as is available
+                  child: Chart(
+                    expenses: _registeredExpenses,
+                  ),
+                ),
+                Expanded(
+                  // This Expanded wrapper is important - it limits the otherwise infinite heights and widths of inner rows/columns/etc.
+                  child: mainContent,
+                ),
+              ],
+            ),
     );
   }
 }
